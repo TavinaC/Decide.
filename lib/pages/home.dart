@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
     'Number Generator',
     'Coin Flip',
     'Dice Roll',
-    'Choice Wheel',
+    'Wheel Selector',
   ];
 
   static const List<String> routes = [
