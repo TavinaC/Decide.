@@ -25,15 +25,40 @@ class HomePage extends StatelessWidget {
     return BasePage(
       title: "Decide.",
       container: Container(
-        padding: EdgeInsets.only(left:padding, right:padding, bottom: padding),
-          child: GridView.builder(
-            itemCount: buttons.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2), 
-            itemBuilder: (BuildContext context, int index) {
-              return HomeButtons(
-                text: buttons[index],
-                route: routes[index],
-                );
-            })
+        padding: EdgeInsets.all(padding),
+          child: 
+            Column(
+              spacing: padding,
+              children: [
+              Expanded(child:
+                Row(
+                  spacing: padding,
+                  children: [
+                  HomeButtons(
+                    text: buttons[0],
+                    route: routes[0],
+                    ),
+                  HomeButtons(
+                    text: buttons[1],
+                    route: routes[1],
+                    ),
+                ],),
+              ),
+              Expanded(child:
+                Row(
+                  spacing: padding,
+                  children: [
+                  HomeButtons(
+                    text: buttons[2],
+                    route: routes[2],
+                    ),
+                  HomeButtons(
+                    text: buttons[3],
+                    route: routes[3],
+                    ),
+                ],),
+              ),
+          ],)
+            
     ));
 }}

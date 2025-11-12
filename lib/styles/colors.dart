@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-Color primary = Color(0xFFeb6b34);
+Color primary = Color.fromARGB(255, 235, 107, 52);
+Color primaryDark = Color.fromARGB(255, 159, 51, 12);
+Color primaryLight = Color.fromARGB(255, 250, 183, 132);
 Color red = Color.fromARGB(255, 197, 34, 34);
 Color green = Color.fromARGB(255, 33, 93, 24);
 Color blue = Color.fromARGB(255, 15, 32, 143);

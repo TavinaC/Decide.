@@ -11,22 +11,22 @@ class HomeButtons extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
         Navigator.pushNamed(context, route);
       },
-      child: Padding(
-      padding: EdgeInsets.all(padding),
         child: Container(
           decoration: BoxDecoration(
+            color: white,
             border: Border.all(
-              color: primary,
+              color: primaryLight,
               width: border,
             ),
             borderRadius: BorderRadius.circular(radius),
           ),
           child: Center(
-            child: Text(text, style: TextStyle(color: black)))
+            child: Text(text, textAlign: TextAlign.center,))
           )
       )
     );

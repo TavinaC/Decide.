@@ -1,5 +1,5 @@
-import 'package:decide2/components/app_bar.dart';
 import 'package:decide2/styles/colors.dart';
+import 'package:decide2/styles/sizes.dart';
 import 'package:flutter/material.dart';
 
 class BasePage extends StatelessWidget {
@@ -11,13 +11,31 @@ class BasePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: white,
-      appBar: Bar(title: title,),
+      backgroundColor: primary,
+      appBar: AppBar(
+        backgroundColor: primary,
+        title: Text(
+          title,
+          style: title == "Decide." ? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.titleMedium,
+        ),
+        iconTheme: IconThemeData(
+          color: white,
+        ),
+        shape: Border(
+          bottom: BorderSide(
+            color: primary,
+            width: border,
+          )
+        ),
+      ),
       body: Column(
         children: [Expanded(
           child: container,
         )]
-      )
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: primary,
+      ),
     );
   }
 }

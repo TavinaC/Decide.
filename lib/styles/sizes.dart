@@ -1,3 +1,3 @@
-double border = 2;
+double border = 4;
 double radius = 24;
-double padding = 8;
+double padding = 12;
