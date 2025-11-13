@@ -28,13 +28,8 @@ class BasePage extends StatelessWidget {
           )
         ),
       ),
-      body: Column(
-        children: [Expanded(
+      body: SafeArea(
           child: container,
-        )]
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: primary,
       ),
     );
   }
