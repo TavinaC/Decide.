@@ -41,7 +41,7 @@ class _NumberGenerator extends State<NumberGenerator> {
   
   final TextEditingController _num1 = TextEditingController();
   final TextEditingController _num2 = TextEditingController();
-  final String rand = "";
+  static String rand = "";
 
   @override
   Widget build(BuildContext context) {
@@ -50,45 +50,64 @@ class _NumberGenerator extends State<NumberGenerator> {
           padding: EdgeInsets.all(padding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Center(child:Text("Enter a Range:")),
-              Padding(
-                padding: EdgeInsetsGeometry.only(left: 2*padding, right: 2*padding, top: 2*padding),
-                child: Row(
-                  spacing: padding,
-                  children: [
-                  Expanded(
-                    child: Text("Min:", textAlign: TextAlign.center,),
+              Column(
+                children: [
+                  Center(child:Text("Enter a Range:")),
+                  Padding(
+                    padding: EdgeInsetsGeometry.only(left: 2*padding, right: 2*padding, top: 2*padding),
+                    child: Row(
+                      spacing: padding,
+                      children: [
+                      Expanded(
+                        child: Text("Min:", textAlign: TextAlign.center,),
+                      ),
+                      Expanded (
+                        flex: 4,
+                        child: Input(num: _num1)
+                      ),
+                    ],),
                   ),
-                  Expanded (
-                    flex: 4,
-                    child: Input(num: _num1)
-                   ),
-                ],),
-              ),
-              Padding(
-                padding: EdgeInsetsGeometry.all(2*padding),
-                child: Row(
-                  spacing: padding,
-                  children: [
-                  Expanded(
-                    child: Text("Max:", textAlign: TextAlign.center,),
+                  Padding(
+                    padding: EdgeInsetsGeometry.all(2*padding),
+                    child: Row(
+                      spacing: padding,
+                      children: [
+                      Expanded(
+                        child: Text("Max:", textAlign: TextAlign.center,),
+                      ),
+                      Expanded (
+                        flex: 4,
+                        child: Input(num: _num2)
+                      ),
+                    ],),
                   ),
-                  Expanded (
-                    flex: 4,
-                    child: Input(num: _num2)
-                   ),
-                ],),
-              ),
-              Expanded(
-                child: Container (
-                  margin: EdgeInsets.all(padding),
-                  color: black,//implement random number here
-                )
-              ),
+                ]),
+                Container(
+                    padding: EdgeInsetsGeometry.all(2*padding),
+                    child: Text(
+                      rand,
+                      maxLines: 3,
+                      textAlign : TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 60,
+                      ),
+                  ),
+                ),
               GestureDetector(
                 onTap: () {
+                  int num1 = int.parse(_num1.text);
+                  int num2 = int.parse(_num2.text);
 
+                  //validate input
+                  if (num1 + 1 <= num2) {
+                    setState(() {
+                      rand = (Random().nextInt(num2-num1+1) + num1).toString();
+                    }); 
+                  } else {
+                    //throw error
+                  }
                 },
                 child: Container(
                   height: 6*padding,
@@ -153,6 +172,7 @@ class Input extends StatelessWidget {
               ),
               fillColor: yellowLight,
               filled: true,
+              hoverColor: yellowLight,
             )
     );
   }
