@@ -5,6 +5,7 @@ import 'package:decide2/styles/colors.dart';
 import 'package:decide2/styles/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class RNG extends StatelessWidget {
   const RNG({super.key});
@@ -44,137 +45,162 @@ class _NumberGenerator extends State<NumberGenerator> {
   static String rand = "";
 
   @override
+      void initState() {
+        super.initState(); // Always call super.initState() first
+        rand = "";
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
+
     return Container(
           constraints: const BoxConstraints.expand(),
           padding: EdgeInsets.all(padding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Center(child:Text("Enter a Range:")),
-                  Padding(
-                    padding: EdgeInsetsGeometry.only(left: 2*padding, right: 2*padding, top: 2*padding),
-                    child: Row(
-                      spacing: padding,
-                      children: [
-                      Expanded(
-                        child: Text("Min:", textAlign: TextAlign.center,),
-                      ),
-                      Expanded (
-                        flex: 4,
-                        child: Input(num: _num1)
-                      ),
-                    ],),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Center(child:Text("Enter a Range:")),
+                    Padding(
+                      padding: EdgeInsetsGeometry.only(left: 2*padding, right: 2*padding, top: 2*padding),
+                      child: Input(num1: _num1, num2: _num2, text: "Min:",)
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.only(left: 2*padding, right: 2*padding, top: 2*padding),
+                      child: Input(num1: _num2, num2: _num1, text: "Max:",)
+                    ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsetsGeometry.all(2*padding),
-                    child: Row(
-                      spacing: padding,
-                      children: [
-                      Expanded(
-                        child: Text("Max:", textAlign: TextAlign.center,),
-                      ),
-                      Expanded (
-                        flex: 4,
-                        child: Input(num: _num2)
-                      ),
-                    ],),
-                  ),
-                ]),
-                Container(
-                    padding: EdgeInsetsGeometry.all(2*padding),
-                    child: Text(
-                      rand,
-                      maxLines: 3,
-                      textAlign : TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 60,
-                      ),
+                Expanded ( 
+                  child: Container(
+                  padding: EdgeInsetsGeometry.all(2*padding),
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(rand,),
+                    )
                   ),
                 ),
-              GestureDetector(
-                onTap: () {
-                  int num1 = int.parse(_num1.text);
-                  int num2 = int.parse(_num2.text);
+                GestureDetector(
+                      onTap: () {
+                        if (formKey.currentState!.validate()) {
+                          int num1 = int.parse(_num1.text);
+                          int num2 = int.parse(_num2.text);
 
-                  //validate input
-                  if (num1 + 1 <= num2) {
-                    setState(() {
-                      rand = (Random().nextInt(num2-num1+1) + num1).toString();
-                    }); 
-                  } else {
-                    //throw error
-                  }
-                },
-                child: Container(
-                  height: 6*padding,
-                  margin: EdgeInsets.all(padding),
-                  decoration: BoxDecoration(
-                      color: primary,
-                      border: Border.all(
-                        color: primaryLight,
-                        width: border,
-                      ),
-                      borderRadius: BorderRadius.circular(radius),
-                  ),
-                  child: Center( 
-                    child: Text("Generate", style: TextStyle(color: white, fontSize: 32),),
-                  )
+                          setState(() {
+                            rand = NumberFormat.decimalPattern().format(Random().nextInt(num2-num1+1) + num1);
+                          }); 
+                        }
+                      },
+                      child: Container(
+                        height: 6*padding,
+                        margin: EdgeInsets.all(padding),
+                        decoration: BoxDecoration(
+                            color: primary,
+                            border: Border.all(
+                              color: primaryLight,
+                              width: border,
+                            ),
+                            borderRadius: BorderRadius.circular(radius),
+                        ),
+                        child: Center( 
+                          child: Text("Generate", style: TextStyle(color: white, fontSize: 32),),
+                        )
+                      )
                 )
-              )
-            ],
+            ])
           )
-      );
+        );
   }
 }
 
 class Input extends StatelessWidget {
-  const Input({super.key, required this.num});
+  const Input({super.key, required this.num1, required this.num2, required this.text});
 
-  final TextEditingController num;
+  final TextEditingController num1;
+  final TextEditingController num2;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-            controller: num,
-            keyboardType: TextInputType.numberWithOptions(signed: true),
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(
-                RegExp(r'^-?\d*')
-              ),
-              LengthLimitingTextInputFormatter(18)
-            ],
-            style: Theme.of(context).textTheme.bodyMedium,
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: yellow,
-                  width: border,
-                ),
-                borderRadius: BorderRadius.circular(radius/2)
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: yellow,
-                  width: border,
-                ),
-                borderRadius: BorderRadius.circular(radius/2)
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: primary,
-                  width: border,
-                ),
-                borderRadius: BorderRadius.circular(radius/2)
-              ),
-              fillColor: yellowLight,
-              filled: true,
-              hoverColor: yellowLight,
-            )
-    );
+    return Row(
+            spacing: padding,
+            children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 22),
+                child: Text(text, textAlign: TextAlign.center,),
+              )
+            ),
+            Expanded (
+              flex: 4,
+              child: TextFormField(
+                controller: num1,
+                keyboardType: TextInputType.numberWithOptions(signed: true),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.allow(
+                    RegExp(r'^-?\d*')
+                  ),
+                  LengthLimitingTextInputFormatter(9)
+                ],
+                style: Theme.of(context).textTheme.bodyMedium,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'This field cannot be empty.';
+                  }
+                  int? n1 = (text == "Min:") ? int.parse(num1.text): int.tryParse(num2.text);
+                  int? n2 = (text == "Max:") ? int.parse(num1.text): int.tryParse(num2.text);
+
+                  if (n1 != null && n2 != null && n1 + 1 > n2) {
+                      return (text == "Min:") ? 'Min must be < Max' : 'Max must be > Min';
+                  }
+
+                  return null;
+                },
+                decoration: InputDecoration(
+                  helperText: '',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: yellow,
+                      width: border,
+                    ),
+                    borderRadius: BorderRadius.circular(radius/2)
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: yellow,
+                      width: border,
+                    ),
+                    borderRadius: BorderRadius.circular(radius/2)
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: primary,
+                      width: border,
+                    ),
+                    borderRadius: BorderRadius.circular(radius/2)
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: primary,
+                      width: border,
+                    ),
+                    borderRadius: BorderRadius.circular(radius/2)
+                  ),
+                  fillColor: yellowLight,
+                  filled: true,
+                  hoverColor: yellowLight,
+                )
+                )
+            ),
+          ],);
+    
+    
+          
   }
 
 }

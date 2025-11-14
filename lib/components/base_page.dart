@@ -10,28 +10,33 @@ class BasePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: primary,
-      appBar: AppBar(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: primary,
-        title: Text(
-          title,
-          style: title == "Decide." ? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.titleMedium,
+        appBar: AppBar(
+          backgroundColor: primary,
+          title: Text(
+            title,
+            style: title == "Decide." ? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.titleMedium,
+          ),
+          iconTheme: IconThemeData(
+            color: white,
+          ),
+          shape: Border(
+            bottom: BorderSide(
+              color: primary,
+              width: border,
+            )
+          ),
         ),
-        iconTheme: IconThemeData(
-          color: white,
+        body: SafeArea(
+            child: container,
         ),
-        shape: Border(
-          bottom: BorderSide(
-            color: primary,
-            width: border,
-          )
-        ),
-      ),
-      body: SafeArea(
-          child: container,
-      ),
+      )
     );
   }
 }
