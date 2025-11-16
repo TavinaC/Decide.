@@ -17,34 +17,32 @@ class Coin extends StatelessWidget {
         constraints: const BoxConstraints.expand(),
         margin: EdgeInsets.all(padding),
         decoration: BoxDecoration(
-            color: white,
-            border: Border.all(
-              color: primaryLight,
-              width: border,
-            ),
-            borderRadius: BorderRadius.circular(radius),
+          color: white,
+          border: Border.all(color: primaryLight, width: border),
+          borderRadius: BorderRadius.circular(radius),
         ),
 
-        child: CoinWidgetManager()
-    ));
+        child: CoinWidgetManager(),
+      ),
+    );
   }
 }
 
 class FlipCoinController {
-
   _CoinState? _state;
 
   Future flipCoin() async => _state?.flipCoin();
 }
 
-class CoinWidgetManager extends StatefulWidget{
+class CoinWidgetManager extends StatefulWidget {
   const CoinWidgetManager({super.key});
 
   @override
   State<CoinWidgetManager> createState() => _CoinWidgetManager();
 }
 
-class _CoinWidgetManager extends State<CoinWidgetManager> with SingleTickerProviderStateMixin{
+class _CoinWidgetManager extends State<CoinWidgetManager>
+    with SingleTickerProviderStateMixin {
   final FlipCoinController controller = FlipCoinController();
 
   Vector3 direction = Vector3(1.0, 0.0, 0.0);
@@ -69,10 +67,10 @@ class _CoinWidgetManager extends State<CoinWidgetManager> with SingleTickerProvi
 
     _animation = Tween<double>(begin: 0.5, end: 1.1).animate(
       CurvedAnimation(
-          parent: _controller,
-          curve: Curves.easeInOut, // Apply the ease-in-out curve
-        ),
-      );
+        parent: _controller,
+        curve: Curves.easeInOut, // Apply the ease-in-out curve
+      ),
+    );
   }
 
   @override
@@ -86,67 +84,70 @@ class _CoinWidgetManager extends State<CoinWidgetManager> with SingleTickerProvi
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onPanStart: (details) {
-          startPosition = details.globalPosition;
+        startPosition = details.globalPosition;
       },
       onPanEnd: (details) async {
-          if (startPosition != null) {
-            // Calculate the difference in screen coordinates
-            final dx = details.globalPosition.dx - startPosition!.dx;
-            final dy = details.globalPosition.dy - startPosition!.dy;
+        if (startPosition != null) {
+          // Calculate the difference in screen coordinates
+          final dx = details.globalPosition.dx - startPosition!.dx;
+          final dy = details.globalPosition.dy - startPosition!.dy;
 
-            setState(() {
-              direction = Vector3(dy, -dx, 0.0).normalized();
-            });
-          }
-          _controller.forward().then((_) {
-              _controller.reverse();
+          setState(() {
+            direction = Vector3(dy, -dx, 0.0).normalized();
           });
-          await controller.flipCoin();
+        }
+        _controller.forward().then((_) {
+          _controller.reverse();
+        });
+        await controller.flipCoin();
       },
       onTap: () async {
         setState(() {
-              direction = Vector3(1.0, 0.0, 0.0);
+          direction = Vector3(1.0, 0.0, 0.0);
         });
         _controller.forward().then((_) {
-              _controller.reverse();
+          _controller.reverse();
         });
         await controller.flipCoin();
       },
       child: ScaleTransition(
         scale: _animation,
-        child: Container (
-          padding: EdgeInsets.all(2*padding),
+        child: Container(
+          padding: EdgeInsets.all(2 * padding),
           child: FittedBox(
-          fit: BoxFit.contain,
-          child: CoinWidget(
-          heads: Image.asset('assets/coin_head.png'), 
-          tails: Image.asset('assets/coin_tail.png'),
-          controller: controller,
-          direction: direction,
+            fit: BoxFit.contain,
+            child: CoinWidget(
+              heads: Image.asset('assets/coin_head.png'),
+              tails: Image.asset('assets/coin_tail.png'),
+              controller: controller,
+              direction: direction,
+            ),
+          ),
         ),
-        )),
-      )
+      ),
     );
   }
 }
 
-class CoinWidget extends StatefulWidget{
-  
-  const CoinWidget({super.key, required this.heads, required this.tails, required this.controller, required this.direction});
+class CoinWidget extends StatefulWidget {
+  const CoinWidget({
+    super.key,
+    required this.heads,
+    required this.tails,
+    required this.controller,
+    required this.direction,
+  });
 
   final Image heads;
   final Image tails;
   final FlipCoinController controller;
   final Vector3 direction;
 
-
   @override
   State<CoinWidget> createState() => _CoinState();
-  
 }
 
-class _CoinState extends State<CoinWidget> with SingleTickerProviderStateMixin{
-
+class _CoinState extends State<CoinWidget> with SingleTickerProviderStateMixin {
   late AnimationController controller;
   bool isHeads = true;
   //double anglePlus = 0;
@@ -159,7 +160,7 @@ class _CoinState extends State<CoinWidget> with SingleTickerProviderStateMixin{
     animationCount = 0;
     outcome = Random().nextBool();
 
-    if(controller.isAnimating) return;
+    if (controller.isAnimating) return;
     await controller.forward(from: 0);
 
     /*for (int i = 1; i <= times; i++) {
@@ -179,7 +180,7 @@ class _CoinState extends State<CoinWidget> with SingleTickerProviderStateMixin{
       //await controller.forward(from:0).then((value) => anglePlus = pi);
     }*/
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -191,16 +192,18 @@ class _CoinState extends State<CoinWidget> with SingleTickerProviderStateMixin{
 
     controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 214)
+      duration: Duration(milliseconds: 214),
     );
 
     controller.addStatusListener((status) async {
-      if (status==AnimationStatus.completed) {
+      if (status == AnimationStatus.completed) {
         if (animationCount < times) {
           animationCount++;
-          double duration = animationCount <= times/2 
-            ? 214
-            : (-32/pow(times, 3)*pow(times-1.5*animationCount, 3)+5)*80;
+          double duration = animationCount <= times / 2
+              ? 214
+              : (-32 / pow(times, 3) * pow(times - 1.5 * animationCount, 3) +
+                        5) *
+                    80;
 
           if (duration <= 150) {
             duration = 150;
@@ -208,13 +211,13 @@ class _CoinState extends State<CoinWidget> with SingleTickerProviderStateMixin{
 
           controller.duration = Duration(milliseconds: duration.toInt());
           if (animationCount == times) {
-            doHalf =  outcome;
+            doHalf = outcome;
           } //else if (!isHeads && animationCount < 1) {
-            //await controller.forward(from:0.5); }
+          //await controller.forward(from:0.5); }
           else {
             doHalf = false;
           }
-          await controller.forward(from:0);
+          await controller.forward(from: 0);
         }
       }
     });
@@ -227,75 +230,76 @@ class _CoinState extends State<CoinWidget> with SingleTickerProviderStateMixin{
     controller.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
         double angle = 0;
-        bool mybool = !isHeads && controller.value < 0.5 && animationCount <1;
-        if(mybool) {
+        bool mybool = !isHeads && controller.value < 0.5 && animationCount < 1;
+        if (mybool) {
           angle = pi;
         }
-        angle =  doHalf ? controller.value*pi+angle : controller.value*2*pi+angle;
+        angle = doHalf
+            ? controller.value * pi + angle
+            : controller.value * 2 * pi + angle;
         //double angle = controller.value*2*pi;
         final transform = Matrix4.identity()
           ..setEntry(3, 2, 0.001)
-          ..rotate(widget.direction,angle);
+          ..rotate(widget.direction, angle);
 
         //print("$controller.value $isHeads $mybool $angle");
 
-        isHeads = (angle.abs() < pi/2 || angle.abs() > 3*pi/2);
+        isHeads = (angle.abs() < pi / 2 || angle.abs() > 3 * pi / 2);
 
         return Transform(
           transform: transform,
           alignment: Alignment.center,
-          child://widget.heads//display front or back depending on angle
-            ((angle.abs() < pi/2 || angle.abs() > 3*pi/2))
-            ? widget.heads
-            : //widget.tails
-            /*Tails(
+          child: //widget.heads//display front or back depending on angle
+          ((angle.abs() < pi / 2 || angle.abs() > 3 * pi / 2))
+              ? widget.heads
+              : //widget.tails
+                /*Tails(
               tails: widget.tails,
               direction: widget.direction,
               angle: angle,
               )*/
-
-              Transform(
-              transform: Matrix4.identity()..rotate(widget.direction, pi),
-              alignment: Alignment.center,
-              child: widget.tails,
-              )
-            /**/
+                Transform(
+                  transform: Matrix4.identity()..rotate(widget.direction, pi),
+                  alignment: Alignment.center,
+                  child: widget.tails,
+                ),
+          /**/
         );
-      }
-    ); 
+      },
+    );
   }
 }
 
 class Tails extends StatefulWidget {
-
   final Image tails;
   final Vector3 direction;
   final double angle;
 
-  const Tails({super.key, required this.tails, required this.direction, required this.angle});
+  const Tails({
+    super.key,
+    required this.tails,
+    required this.direction,
+    required this.angle,
+  });
 
   @override
   State<StatefulWidget> createState() => _TailsState();
-  
 }
 
-class _TailsState extends State<Tails>{
+class _TailsState extends State<Tails> {
   @override
   Widget build(BuildContext context) {
     return Transform(
-              transform: Matrix4.identity()..rotate(widget.direction, pi),
-              alignment: Alignment.center,
-              child: widget.tails,
-            );
+      transform: Matrix4.identity()..rotate(widget.direction, pi),
+      alignment: Alignment.center,
+      child: widget.tails,
+    );
   }
-  
 }
-
-

@@ -21,32 +21,32 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         textTheme: TextTheme(
           titleLarge: GoogleFonts.dynaPuff(
-              fontSize: 32, 
-              fontWeight: FontWeight.bold,
-              color: white,
-              letterSpacing: 2,
-            ),
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+            color: white,
+            letterSpacing: 2,
+          ),
           titleMedium: GoogleFonts.dynaPuff(
-              fontSize: 28, 
-              fontWeight: FontWeight.bold,
-              color: white,
-              letterSpacing: 2,
-            ),
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: white,
+            letterSpacing: 2,
+          ),
           bodyMedium: GoogleFonts.dynaPuff(
-              fontSize: 20, 
-              fontWeight: FontWeight.bold,
-              color: primaryDark,
-              letterSpacing: 2,
-            ),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: primaryDark,
+            letterSpacing: 2,
+          ),
           // Define other text styles as needed
         ),
       ),
       routes: {
-        '/home':(context) => const HomePage(),
-        '/rng':(context) => const RNG(),
-        '/coin':(context) => const Coin(),
-        '/dice':(context) => const Dice(),
-        '/wheel':(context) => const Wheel(),
+        '/home': (context) => const HomePage(),
+        '/rng': (context) => const RNG(),
+        '/coin': (context) => const Coin(),
+        '/dice': (context) => const Dice(),
+        '/wheel': (context) => const Wheel(),
       },
     );
   }

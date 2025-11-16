@@ -13,13 +13,11 @@ class Wheel extends StatelessWidget {
       container: Container(
         margin: EdgeInsets.all(padding),
         decoration: BoxDecoration(
-            color: white,
-            border: Border.all(
-              color: primaryLight,
-              width: border,
-            ),
-            borderRadius: BorderRadius.circular(radius),
-        )
-    ));
+          color: white,
+          border: Border.all(color: primaryLight, width: border),
+          borderRadius: BorderRadius.circular(radius),
+        ),
+      ),
+    );
   }
 }

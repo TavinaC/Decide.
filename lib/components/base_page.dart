@@ -21,22 +21,17 @@ class BasePage extends StatelessWidget {
           backgroundColor: primary,
           title: Text(
             title,
-            style: title == "Decide." ? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.titleMedium,
+            style: title == "Decide."
+                ? Theme.of(context).textTheme.titleLarge
+                : Theme.of(context).textTheme.titleMedium,
           ),
-          iconTheme: IconThemeData(
-            color: white,
-          ),
+          iconTheme: IconThemeData(color: white),
           shape: Border(
-            bottom: BorderSide(
-              color: primary,
-              width: border,
-            )
+            bottom: BorderSide(color: primary, width: border),
           ),
         ),
-        body: SafeArea(
-            child: container,
-        ),
-      )
+        body: SafeArea(child: container),
+      ),
     );
   }
 }

@@ -13,12 +13,7 @@ class HomePage extends StatelessWidget {
     'Wheel Selector',
   ];
 
-  static const List<String> routes = [
-    '/rng',
-    '/coin',
-    '/dice',
-    '/wheel',
-  ];
+  static const List<String> routes = ['/rng', '/coin', '/dice', '/wheel'];
 
   static const List<String> images = [
     'assets/rng.png',
@@ -26,51 +21,53 @@ class HomePage extends StatelessWidget {
     'assets/dice.png',
     'assets/wheel.png',
   ];
-  
+
   @override
   Widget build(BuildContext context) {
     return BasePage(
       title: "Decide.",
       container: Container(
         padding: EdgeInsets.all(padding),
-          child: 
-            Column(
-              spacing: padding,
-              children: [
-              Expanded(child:
-                Row(
-                  spacing: padding,
-                  children: [
+        child: Column(
+          spacing: padding,
+          children: [
+            Expanded(
+              child: Row(
+                spacing: padding,
+                children: [
                   HomeButtons(
                     text: buttons[0],
                     route: routes[0],
                     img: images[0],
-                    ),
+                  ),
                   HomeButtons(
                     text: buttons[1],
                     route: routes[1],
                     img: images[1],
-                    ),
-                ],),
+                  ),
+                ],
               ),
-              Expanded(child:
-                Row(
-                  spacing: padding,
-                  children: [
+            ),
+            Expanded(
+              child: Row(
+                spacing: padding,
+                children: [
                   HomeButtons(
                     text: buttons[2],
                     route: routes[2],
                     img: images[2],
-                    ),
+                  ),
                   HomeButtons(
                     text: buttons[3],
                     route: routes[3],
                     img: images[3],
-                    ),
-                ],),
+                  ),
+                ],
               ),
-              
-          ],)
-            
-    ));
-}}
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
