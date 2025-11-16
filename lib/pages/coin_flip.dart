@@ -65,7 +65,7 @@ class _CoinWidgetManager extends State<CoinWidgetManager>
       _controller.forward(); // Play forward when animation returns to start
     }});*/
 
-    _animation = Tween<double>(begin: 0.5, end: 1.1).animate(
+    _animation = Tween<double>(begin: 0.5, end: 1).animate(
       CurvedAnimation(
         parent: _controller,
         curve: Curves.easeInOut, // Apply the ease-in-out curve
@@ -110,20 +110,36 @@ class _CoinWidgetManager extends State<CoinWidgetManager>
         });
         await controller.flipCoin();
       },
-      child: ScaleTransition(
-        scale: _animation,
-        child: Container(
-          padding: EdgeInsets.all(2 * padding),
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: CoinWidget(
-              heads: Image.asset('assets/coin_head.png'),
-              tails: Image.asset('assets/coin_tail.png'),
-              controller: controller,
-              direction: direction,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ScaleTransition(
+            scale: _animation,
+            child: Container(
+              padding: EdgeInsets.all(2 * padding),
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: CoinWidget(
+                  heads: Image.asset('assets/coin_head.png'),
+                  tails: Image.asset('assets/coin_tail.png'),
+                  controller: controller,
+                  direction: direction,
+                ),
+              ),
             ),
           ),
-        ),
+          Container(
+            height: 6 * padding,
+            margin: EdgeInsets.all(padding),
+            child: Center(
+              child: Text(
+                "Swipe to Flip",
+                style: TextStyle(color: primary, fontSize: 32),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -238,7 +254,10 @@ class _CoinState extends State<CoinWidget> with SingleTickerProviderStateMixin {
       builder: (context, child) {
         double angle = 0;
         bool mybool = !isHeads && controller.value < 0.5 && animationCount < 1;
-        if (mybool) {angle = pi; doHalf=true;}
+        if (mybool) {
+          angle = pi;
+          doHalf = true;
+        }
         angle = doHalf
             ? controller.value * pi + angle
             : controller.value * 2 * pi + angle;
