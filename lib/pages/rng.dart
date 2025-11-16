@@ -51,6 +51,13 @@ class _NumberGenerator extends State<NumberGenerator> {
   }
 
   @override
+  void dispose() {
+    _num1.dispose();
+    _num2.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
 

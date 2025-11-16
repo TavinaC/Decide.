@@ -19,6 +19,13 @@ class HomePage extends StatelessWidget {
     '/dice',
     '/wheel',
   ];
+
+  static const List<String> images = [
+    'assets/rng.png',
+    'assets/coin.png',
+    'assets/dice.png',
+    'assets/wheel.png',
+  ];
   
   @override
   Widget build(BuildContext context) {
@@ -37,10 +44,12 @@ class HomePage extends StatelessWidget {
                   HomeButtons(
                     text: buttons[0],
                     route: routes[0],
+                    img: images[0],
                     ),
                   HomeButtons(
                     text: buttons[1],
                     route: routes[1],
+                    img: images[1],
                     ),
                 ],),
               ),
@@ -51,10 +60,12 @@ class HomePage extends StatelessWidget {
                   HomeButtons(
                     text: buttons[2],
                     route: routes[2],
+                    img: images[2],
                     ),
                   HomeButtons(
                     text: buttons[3],
                     route: routes[3],
+                    img: images[3],
                     ),
                 ],),
               ),
