@@ -238,9 +238,7 @@ class _CoinState extends State<CoinWidget> with SingleTickerProviderStateMixin {
       builder: (context, child) {
         double angle = 0;
         bool mybool = !isHeads && controller.value < 0.5 && animationCount < 1;
-        if (mybool) {
-          angle = pi;
-        }
+        if (mybool) {angle = pi; doHalf=true;}
         angle = doHalf
             ? controller.value * pi + angle
             : controller.value * 2 * pi + angle;
@@ -251,7 +249,7 @@ class _CoinState extends State<CoinWidget> with SingleTickerProviderStateMixin {
 
         //print("$controller.value $isHeads $mybool $angle");
 
-        isHeads = (angle.abs() < pi / 2 || angle.abs() > 3 * pi / 2);
+        isHeads = (angle.abs() <= pi / 2 || angle.abs() >= 3 * pi / 2);
 
         return Transform(
           transform: transform,
