@@ -1,5 +1,5 @@
 import 'package:decide2/pages/coin_flip.dart';
-import 'package:decide2/pages/dice_roll.dart';
+import 'package:decide2/pages/magic_ball.dart';
 import 'package:decide2/pages/rng.dart';
 import 'package:decide2/pages/spin_wheel.dart';
 import 'package:decide2/styles/colors.dart';
@@ -45,8 +45,9 @@ class MainApp extends StatelessWidget {
         '/home': (context) => const HomePage(),
         '/rng': (context) => const RNG(),
         '/coin': (context) => const Coin(),
-        '/dice': (context) => const Dice(),
+        //'/dice': (context) => const Dice(),
         '/wheel': (context) => const Wheel(),
+        '/magic_ball': (context) => const MagicBall(),
       },
     );
   }

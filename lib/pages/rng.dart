@@ -38,6 +38,7 @@ class _NumberGenerator extends State<NumberGenerator> {
   final TextEditingController _num1 = TextEditingController();
   final TextEditingController _num2 = TextEditingController();
   static String rand = "";
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -54,7 +55,6 @@ class _NumberGenerator extends State<NumberGenerator> {
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
 
     return Container(
       constraints: const BoxConstraints.expand(),

@@ -11,15 +11,17 @@ class HomePage extends StatelessWidget {
     'Coin Flip',
     'Dice Roll',
     'Wheel Selector',
+    'Magic 8 Ball',
   ];
 
-  static const List<String> routes = ['/rng', '/coin', '/dice', '/wheel'];
+  static const List<String> routes = ['/rng', '/coin', '/dice', '/wheel', '/magic_ball'];
 
   static const List<String> images = [
     'assets/rng.png',
     'assets/coin.png',
     'assets/dice.png',
     'assets/wheel.png',
+    'assets/dice.png',
   ];
 
   @override
@@ -53,9 +55,9 @@ class HomePage extends StatelessWidget {
                 spacing: padding,
                 children: [
                   HomeButtons(
-                    text: buttons[2],
-                    route: routes[2],
-                    img: images[2],
+                    text: buttons[4],
+                    route: routes[4],
+                    img: images[4],
                   ),
                   HomeButtons(
                     text: buttons[3],
