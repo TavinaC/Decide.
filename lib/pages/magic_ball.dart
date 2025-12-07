@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:decide2/components/base_page.dart';
 import 'package:decide2/styles/colors.dart';
 import 'package:decide2/styles/sizes.dart';
@@ -70,30 +68,32 @@ class _MagicBallState extends State<MagicBallManager>
     super.initState();
   }
 
-  void _toggleText() {
-    setState(() {
-      _visible = !_visible;
-    });
-  }
-
   @override
   Widget build(Object context) {
     return ShakeGesture(
         onShake: () => {
-          _toggleText(),
+          setState(() {
+              _visible = false;
+            }),
           index = Random().nextInt(answerList.length),
           answer = answerList[index],
-          _toggleText()
+          setState(() {
+              _visible = true;
+            })
         },
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onPanStart:(details) {
-            _toggleText();
+            setState(() {
+              _visible = false;
+            });
           },
           onPanEnd: (details) async {
             index = Random().nextInt(answerList.length);
             answer = answerList[index];
-            _toggleText();
+            setState(() {
+              _visible = true;
+            });
           },
           // onTap: () => {
           //   ShakeGestureTestHelperExtension.simulateShake
