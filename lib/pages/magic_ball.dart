@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:decide2/components/base_page.dart';
 import 'package:decide2/styles/colors.dart';
 import 'package:decide2/styles/sizes.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shake_gesture/shake_gesture.dart';
+// import 'package:shake_gesture_test_helper/shake_gesture_test_helper.dart';
 
 class MagicBall extends StatelessWidget {
   const MagicBall({super.key});
@@ -18,7 +22,7 @@ class MagicBall extends StatelessWidget {
         margin: EdgeInsets.all(padding),
         decoration: BoxDecoration(
           color: black,
-          border: Border.all(color: greyDark, width: border),
+          border: Border.all(color: primaryLight, width: border),
           borderRadius: BorderRadius.circular(radius),
         ),
         child: MagicBallManager(),
@@ -36,91 +40,122 @@ class MagicBallManager extends StatefulWidget {
 
 class _MagicBallState extends State<MagicBallManager>
     with SingleTickerProviderStateMixin {
-  late String answer;
+  String answer = "";
   late int index;
   bool _visible = true;
 
-  List<String> answerList = ["Yes", "No", "Better Luck \nNext Time", "Your Fate Has\n Changed", "Ask Again\nLater"];
+  List<String> answerList = [ "Yes", 
+                              "It Is\nDecidedly\nSo", 
+                              "Without\na Doubt",
+                              "Yes,\nDefinitely",
+                              "You May Rely\n On It",
+                              "As I See\nIt, Yes",
+                              "Most Likely", 
+                              "Outlook Good",
+                              "Signs Point\nTo Yes",
+                              "Ask Again\nLater", 
+                              "Reply Hazy,\nTry Again",
+                              "It Is\nCertain", 
+                              "Better Not\nTell You Now",
+                              "Cannot\nPredict\nNow",
+                              "Concentrate\nAnd Ask\nAgain",
+                              "Don't Count\nOn It",
+                              "My Reply\nIs No",
+                              "My Sources\n Say No",
+                              "Outlook Not\nSo Good",
+                              "Very\nDoubtful"];
 
   @override
   void initState() {
     super.initState();
-    index = Random().nextInt(answerList.length);
-    answer = answerList[index];
+  }
+
+  void _toggleText() {
+    setState(() {
+      _visible = !_visible;
+    });
   }
 
   @override
   Widget build(Object context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onPanStart:(details) {
-        setState(() {
-          _visible = false;
-        });
-      },
-      onPanEnd: (details) async {
-        index = Random().nextInt(answerList.length);
-        answer = answerList[index];
-        setState(() {
-          _visible = true;
-        });
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          SizedBox(height: 8*padding,),
-          Expanded(
-            /*child: ClipPath(
-              clipper: TriangleClipper(),
-              child: Container(
-                padding: EdgeInsets.only(top: 3*padding),
-                alignment: Alignment.topCenter,
-                color: blue,
-                    child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: Text(
-                      answer,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.pixelifySans(
-                        color: white,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 28
-                        ),
-                      softWrap: true,
-                    ),
-                    ),
-              ),
-            ),*/
-              child: 
-                // CustomPaint(
-                //   painter: TrianglePainter(),
-                // ),
-                ClipPath(
+    return ShakeGesture(
+        onShake: () => {
+          _toggleText(),
+          index = Random().nextInt(answerList.length),
+          answer = answerList[index],
+          _toggleText()
+        },
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onPanStart:(details) {
+            _toggleText();
+          },
+          onPanEnd: (details) async {
+            index = Random().nextInt(answerList.length);
+            answer = answerList[index];
+            _toggleText();
+          },
+          // onTap: () => {
+          //   ShakeGestureTestHelperExtension.simulateShake
+          // },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(height: 8*padding,),
+              Expanded(
+                /*child: ClipPath(
                   clipper: TriangleClipper(),
                   child: Container(
+                    padding: EdgeInsets.only(top: 3*padding),
+                    alignment: Alignment.topCenter,
                     color: blue,
-                    child: AnimatedOpacity(
-                  opacity: _visible ? 1.0 : 0.0,
-                  duration: _visible ? const Duration(milliseconds: 500): const Duration(milliseconds: 100),
-                  child: CustomPaint(
-                  painter: TriangleTextPainter(text:answer),
-                )),
-              )),
-            ),
-          Container(
-            height: 6 * padding,
-            margin: EdgeInsets.all(padding),
-            child: Center(
-              child: Text(
-                "Shake Me!",
-                style: TextStyle(color: white, fontSize: 32),
+                        child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          answer,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.pixelifySans(
+                            color: white,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 28
+                            ),
+                          softWrap: true,
+                        ),
+                        ),
+                  ),
+                ),*/
+                  child: 
+                    // CustomPaint(
+                    //   painter: TrianglePainter(),
+                    // ),
+                    ClipPath(
+                      clipper: TriangleClipper(),
+                      child: Container(
+                        color: blue,
+                        child: AnimatedOpacity(
+                      opacity: _visible ? 1.0 : 0.0,
+                      duration: _visible ? const Duration(milliseconds: 500): const Duration(milliseconds: 100),
+                      child: CustomPaint(
+                      painter: TriangleTextPainter(text:answer),
+                    )),
+                  )),
+                ),
+              Container(
+                height: 9 * padding,
+                margin: EdgeInsets.all(padding),
+                child: Center(
+                  child: Text(
+                    "Swipe Or\nShake Me!",
+                    style: TextStyle(color: white, fontSize: 32),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
-            ),
+              SizedBox(height: 2*padding,),
+            ],
           ),
-          SizedBox(height: 2*padding,),
-        ],
-      ),
+        ),
     );
   }
 }
