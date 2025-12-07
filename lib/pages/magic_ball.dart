@@ -36,15 +36,17 @@ class MagicBallManager extends StatefulWidget {
 
 class _MagicBallState extends State<MagicBallManager>
     with SingleTickerProviderStateMixin {
-  String answer = "";
+  late String answer;
   late int index;
   bool _visible = true;
 
-  List<String> answerList = ["Yes", "No", "Better Luck \nNext Time"];
+  List<String> answerList = ["Yes", "No", "Better Luck \nNext Time", "Your Fate Has\n Changed", "Ask Again\nLater"];
 
   @override
   void initState() {
     super.initState();
+    index = Random().nextInt(answerList.length);
+    answer = answerList[index];
   }
 
   @override
@@ -62,7 +64,6 @@ class _MagicBallState extends State<MagicBallManager>
         setState(() {
           _visible = true;
         });
-
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -91,13 +92,22 @@ class _MagicBallState extends State<MagicBallManager>
                     ),
               ),
             ),*/
-            child: AnimatedOpacity(
-              opacity: _visible ? 1.0 : 0.0,
-              duration: _visible ? const Duration(milliseconds: 500): const Duration(milliseconds: 100),
-              child: CustomPaint(
-              painter: TrianglePainter(text:answer),
-            ))
-          ),
+              child: 
+                // CustomPaint(
+                //   painter: TrianglePainter(),
+                // ),
+                ClipPath(
+                  clipper: TriangleClipper(),
+                  child: Container(
+                    color: blue,
+                    child: AnimatedOpacity(
+                  opacity: _visible ? 1.0 : 0.0,
+                  duration: _visible ? const Duration(milliseconds: 500): const Duration(milliseconds: 100),
+                  child: CustomPaint(
+                  painter: TriangleTextPainter(text:answer),
+                )),
+              )),
+            ),
           Container(
             height: 6 * padding,
             margin: EdgeInsets.all(padding),
@@ -132,22 +142,36 @@ class TriangleClipper extends CustomClipper<Path> {
   }
 }
 
-class TrianglePainter extends CustomPainter {
+// class TrianglePainter extends CustomPainter {
+
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final paint = Paint()
+//     ..color = blue
+//     ..style = PaintingStyle.fill;
+
+//     final path = Path();
+//     path.moveTo(0, 0); // Bottom left
+//     path.lineTo(size.width, 0); // Bottom right
+//     path.lineTo(size.width / 2, size.width); // Top center
+//     path.close();
+
+//     canvas.drawPath(path, paint);
+//   }
+
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) {
+//     return false;
+//   }
+// }
+
+class TriangleTextPainter extends CustomPainter {
   String text;
 
-  TrianglePainter({required this.text});
+  TriangleTextPainter({required this.text});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-    ..color = blue
-    ..style = PaintingStyle.fill;
-
-    final path = Path();
-    path.moveTo(0, 0); // Bottom left
-    path.lineTo(size.width, 0); // Bottom right
-    path.lineTo(size.width / 2, size.width); // Top center
-    path.close();
 
     final textPainter = TextPainter(
       text: TextSpan(
@@ -162,8 +186,8 @@ class TrianglePainter extends CustomPainter {
       textAlign: TextAlign.center,
     );
 
-    canvas.drawPath(path, paint);
-    textPainter.layout(maxWidth: size.width-padding);
+    //textPainter.layout(maxWidth: size.width-padding);
+    textPainter.layout();
     final offset = Offset(
       (size.width - textPainter.width) / 2, // Center horizontally
       (size.width - textPainter.height) / 3, // Center vertically
@@ -174,6 +198,6 @@ class TrianglePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    return oldDelegate is TrianglePainter && oldDelegate.text != text;
+    return oldDelegate is TriangleTextPainter && oldDelegate.text != text;
   }
 }
