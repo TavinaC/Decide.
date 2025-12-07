@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
     'assets/coin.png',
     'assets/dice.png',
     'assets/wheel.png',
-    'assets/dice.png',
+    'assets/ball.png',
   ];
 
   @override
