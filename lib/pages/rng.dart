@@ -59,7 +59,7 @@ class _NumberGenerator extends State<NumberGenerator> {
 
     return Container(
       constraints: const BoxConstraints.expand(),
-      padding: EdgeInsets.all(padding),
+      padding: EdgeInsets.all(2*padding),
       child: Form(
         key: formKey,
         child: Column(

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:decide2/components/base_page.dart';
 import 'package:decide2/styles/colors.dart';
 import 'package:decide2/styles/sizes.dart';
@@ -5,18 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:flutter_soloud/flutter_soloud.dart';
+import '../components/audio_controller.dart';
 
 
 class Wheel extends StatelessWidget {
-  const Wheel({super.key});
+  const Wheel({super.key, required this.audioController});
+
+  final AudioController audioController;
 
   @override
   Widget build(BuildContext context) {
     return BasePage(
       title: "Wheel Selector",
       container: Container(
-        padding: EdgeInsets.all(padding),
+        padding: EdgeInsets.all(2*padding),
         constraints: const BoxConstraints.expand(),
         margin: EdgeInsets.all(padding),
         decoration: BoxDecoration(
@@ -25,14 +29,16 @@ class Wheel extends StatelessWidget {
           borderRadius: BorderRadius.circular(radius),
           
         ),
-        child:SpinWheel()
+        child:SpinWheel(audioController: audioController)
     ));
   }
 }
 
 class SpinWheel extends StatefulWidget {
-  const SpinWheel({super.key});
-  
+  const SpinWheel({super.key, required this.audioController});
+
+  final AudioController audioController;
+
   @override
   State<SpinWheel> createState() => _SpinWheelState();
   
@@ -44,10 +50,13 @@ class _SpinWheelState extends State<SpinWheel> {
     "Orange", "Lemon", "Lime", "Grapefruit", "Tangerine", "Pomelo"
   ];
 
+  static const sounds = ['assets/sounds/tick1.mp3','assets/sounds/tick2.mp3', 'assets/sounds/tick3.mp3'];
+
+  Random random = Random();
+
   final result = BehaviorSubject<int>();
   BehaviorSubject<int> selected = BehaviorSubject<int>();
   late int prev;
-
 
   @override
   void initState() {
@@ -82,7 +91,7 @@ class _SpinWheelState extends State<SpinWheel> {
                     int result = snapshot.data ?? 0;
                 
                     if (result != prev) {
-                
+                      widget.audioController.playSound(sounds[random.nextInt(3)]);
                       prev = result;
                     }
                 
@@ -127,7 +136,8 @@ class _SpinWheelState extends State<SpinWheel> {
                               textAlign: TextAlign.center,
                               style: GoogleFonts.dynaPuff(
                                 color: white,
-                                fontSize: 12
+                                fontSize: 12,
+                                letterSpacing: 1,
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
