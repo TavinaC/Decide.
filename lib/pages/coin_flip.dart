@@ -121,8 +121,8 @@ class _CoinWidgetManager extends State<CoinWidgetManager>
               child: FittedBox(
                 fit: BoxFit.contain,
                 child: CoinWidget(
-                  heads: Image.asset('assets/coin_head.png'),
-                  tails: Image.asset('assets/coin_tail.png'),
+                  heads: Image.asset('assets/icons/coin_head.png'),
+                  tails: Image.asset('assets/icons/coin_tail.png'),
                   controller: controller,
                   direction: direction,
                 ),
