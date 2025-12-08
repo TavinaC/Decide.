@@ -5,6 +5,7 @@ import 'package:decide2/styles/colors.dart';
 import 'package:decide2/styles/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class RNG extends StatelessWidget {
@@ -92,35 +93,66 @@ class _NumberGenerator extends State<NumberGenerator> {
                 child: FittedBox(fit: BoxFit.contain, child: Text(rand)),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                if (formKey.currentState!.validate()) {
-                  int num1 = int.parse(_num1.text);
-                  int num2 = int.parse(_num2.text);
+            // GestureDetector(
+            //   onTap: () {
+            //     if (formKey.currentState!.validate()) {
+            //       int num1 = int.parse(_num1.text);
+            //       int num2 = int.parse(_num2.text);
 
-                  setState(() {
-                    rand = NumberFormat.decimalPattern().format(
-                      Random().nextInt(num2 - num1 + 1) + num1,
-                    );
-                  });
-                }
-              },
-              child: Container(
-                height: 6 * padding,
-                margin: EdgeInsets.all(padding),
-                decoration: BoxDecoration(
-                  color: primary,
-                  border: Border.all(color: primaryLight, width: border),
-                  borderRadius: BorderRadius.circular(radius),
-                ),
-                child: Center(
-                  child: Text(
-                    "Generate",
-                    style: TextStyle(color: white, fontSize: 32),
+            //       setState(() {
+            //         rand = NumberFormat.decimalPattern().format(
+            //           Random().nextInt(num2 - num1 + 1) + num1,
+            //         );
+            //       });
+            //     }
+            //   },
+            //   child: Container(
+            //     height: 6 * padding,
+            //     margin: EdgeInsets.all(padding),
+            //     decoration: BoxDecoration(
+            //       color: primary,
+            //       border: Border.all(color: primaryLight, width: border),
+            //       borderRadius: BorderRadius.circular(radius),
+            //     ),
+            //     child: Center(
+            //       child: Text(
+            //         "Generate",
+            //         style: TextStyle(color: white, fontSize: 32),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            ConstrainedBox(
+              constraints: BoxConstraints.tightFor(height: 6*padding),
+              child: ElevatedButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    int num1 = int.parse(_num1.text);
+                    int num2 = int.parse(_num2.text);
+              
+                    setState(() {
+                      rand = NumberFormat.decimalPattern().format(
+                        Random().nextInt(num2 - num1 + 1) + num1,
+                      );
+                    });
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  overlayColor: primaryDark,
+                  backgroundColor: primary,
+                  shadowColor: primaryDark,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(radius),
+                    side:BorderSide(
+                      width: border,
+                      color: primaryLight
+                    )
                   ),
+                  padding: EdgeInsets.all(padding),
                 ),
-              ),
-            ),
+                child: Text("Generate", style: GoogleFonts.dynaPuff(color: white, fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: 2))),
+            )
           ],
         ),
       ),

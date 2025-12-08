@@ -13,3 +13,6 @@ Color greyDark = Color.fromARGB(255, 65, 65, 65);
 Color grey = Color.fromARGB(255, 144, 144, 144);
 Color yellow = Color.fromARGB(255, 255, 233, 196);
 Color yellowLight = Color.fromARGB(255, 255, 242, 221);
+
+Color wheel2 = Color.fromARGB(255, 223, 81, 20);
+Color wheel3 = Color.fromARGB(255, 254, 153, 64);

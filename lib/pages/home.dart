@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
     'Number Generator',
     'Coin Flip',
     'Dice Roll',
-    'Wheel Selector',
+    'Spin Wheel',
     'Magic 8 Ball',
   ];
 
