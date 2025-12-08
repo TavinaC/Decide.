@@ -59,7 +59,7 @@ class _NumberGenerator extends State<NumberGenerator> {
 
     return Container(
       constraints: const BoxConstraints.expand(),
-      padding: EdgeInsets.all(2*padding),
+      padding: EdgeInsets.all(padding),
       child: Form(
         key: formKey,
         child: Column(
@@ -122,36 +122,39 @@ class _NumberGenerator extends State<NumberGenerator> {
             //     ),
             //   ),
             // ),
-            ConstrainedBox(
-              constraints: BoxConstraints.tightFor(height: 6*padding),
-              child: ElevatedButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    int num1 = int.parse(_num1.text);
-                    int num2 = int.parse(_num2.text);
-              
-                    setState(() {
-                      rand = NumberFormat.decimalPattern().format(
-                        Random().nextInt(num2 - num1 + 1) + num1,
-                      );
-                    });
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  overlayColor: primaryDark,
-                  backgroundColor: primary,
-                  shadowColor: primaryDark,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(radius),
-                    side:BorderSide(
-                      width: border,
-                      color: primaryLight
-                    )
+            Padding(
+              padding: EdgeInsets.all(padding),
+              child: ConstrainedBox(
+                constraints: BoxConstraints.tightFor(height: 6*padding),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      int num1 = int.parse(_num1.text);
+                      int num2 = int.parse(_num2.text);
+                
+                      setState(() {
+                        rand = NumberFormat.decimalPattern().format(
+                          Random().nextInt(num2 - num1 + 1) + num1,
+                        );
+                      });
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    overlayColor: primaryDark,
+                    backgroundColor: primary,
+                    shadowColor: primaryDark,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(radius),
+                      side:BorderSide(
+                        width: border,
+                        color: primaryLight
+                      )
+                    ),
+                    padding: EdgeInsets.all(padding),
                   ),
-                  padding: EdgeInsets.all(padding),
-                ),
-                child: Text("Generate", style: GoogleFonts.dynaPuff(color: white, fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: 2))),
+                  child: Text("Generate", style: GoogleFonts.dynaPuff(color: white, fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: 2))),
+              ),
             )
           ],
         ),
