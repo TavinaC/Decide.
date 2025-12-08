@@ -17,11 +17,11 @@ class HomePage extends StatelessWidget {
   static const List<String> routes = ['/rng', '/coin', '/dice', '/wheel', '/magic_ball'];
 
   static const List<String> images = [
-    'assets/rng.png',
-    'assets/coin.png',
-    'assets/dice.png',
-    'assets/wheel.png',
-    'assets/ball.png',
+    'assets/icons/rng.png',
+    'assets/icons/coin.png',
+    'assets/icons/dice.png',
+    'assets/icons/wheel.png',
+    'assets/icons/ball.png',
   ];
 
   @override

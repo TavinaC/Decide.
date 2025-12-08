@@ -8,6 +8,7 @@ import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rxdart/rxdart.dart';
 import '../components/audio_controller.dart';
+import 'package:confetti/confetti.dart';
 
 
 class Wheel extends StatelessWidget {
@@ -50,13 +51,13 @@ class _SpinWheelState extends State<SpinWheel> {
     "Orange", "Lemon", "Lime", "Grapefruit", "Tangerine", "Pomelo"
   ];
 
-  static const sounds = ['assets/sounds/tick1.mp3','assets/sounds/tick2.mp3', 'assets/sounds/tick3.mp3'];
-
   Random random = Random();
 
   final result = BehaviorSubject<int>();
   BehaviorSubject<int> selected = BehaviorSubject<int>();
   late int prev;
+
+  final confetti = ConfettiController(duration: const Duration(milliseconds: 100));
 
   @override
   void initState() {
@@ -68,133 +69,146 @@ class _SpinWheelState extends State<SpinWheel> {
   void dispose() {
     result.close();
     selected.close();
+    confetti.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Stack(
+      alignment: Alignment.topCenter,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SizedBox(
-                height: 7*padding,
-                child: StreamBuilder(
-                  stream: selected, 
-                  initialData: 0,
-                  builder: (context, snapshot) {
-                    int result = snapshot.data ?? 0;
-                
-                    if (result != prev) {
-                      widget.audioController.playSound(sounds[random.nextInt(3)]);
-                      prev = result;
-                    }
-                
-                    return Text(
-                        items[result],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: primary, fontSize: 32),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                    );
-                  }
-                ),
-              ),
-              AspectRatio(
-                aspectRatio: 0.95,
-                  child: FortuneWheel(
-                    physics: CircularPanPhysics(
-                      duration: Duration(seconds: 1),
-                      curve: Curves.decelerate,
-                    ),
-                    onFling: () {
-                      result.add(Fortune.randomInt(0, items.length));
-                    },
-                    onAnimationEnd: () => {
-                      // print(items[result.value])
-                      // setState(() {
-                      //   selected = items[result.value];
-                      // })
-                    },
-                    onFocusItemChanged: (value) => {
-                      selected.add(value)
-                    },
-                    selected: result.stream,
-                    animateFirst: false,
-                    items: [
-                      for(int i = 0; i < items.length; i ++)...<FortuneItem> {
-                        FortuneItem(
-                          child: Padding(
-                            padding: EdgeInsets.only(left:4*padding, right: 2*padding),
-                            child: Text(
-                              items[i].toString(),
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.dynaPuff(
-                                color: white,
-                                fontSize: 12,
-                                letterSpacing: 1,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                      SizedBox(
+                        height: 7*padding,
+                        child: StreamBuilder(
+                          stream: selected, 
+                          initialData: 0,
+                          builder: (context, snapshot) {
+                            int result = snapshot.data ?? 0;
+                        
+                            if (result != prev) {
+                              widget.audioController.playSound(random.nextInt(3));
+                              prev = result;
+                            }
+                        
+                            return Text(
+                                items[result],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: primary, fontSize: 32),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                            );
+                          }
+                        ),
+                      ),
+                  AspectRatio(
+                    aspectRatio: 0.95,
+                      child: FortuneWheel(
+                        physics: CircularPanPhysics(
+                          duration: Duration(seconds: 1),
+                          curve: Curves.decelerate,
+                        ),
+                        onFling: () {
+                          result.add(Fortune.randomInt(0, items.length));
+                        },
+                        onAnimationEnd: () => {
+                          confetti.play()
+                        },
+                        onFocusItemChanged: (value) => {
+                          selected.add(value)
+                        },
+                        selected: result.stream,
+                        animateFirst: false,
+                        items: [
+                          for(int i = 0; i < items.length; i ++)...<FortuneItem> {
+                            FortuneItem(
+                              child: Padding(
+                                padding: EdgeInsets.only(left:4*padding, right: 2*padding),
+                                child: Text(
+                                  items[i].toString(),
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.dynaPuff(
+                                    color: white,
+                                    fontSize: 12,
+                                    letterSpacing: 1,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          style: FortuneItemStyle(
-                            color: getColor(i),
-                            borderColor: primaryLight,
-                            borderWidth: 2*padding/3,
+                              style: FortuneItemStyle(
+                                color: getColor(i),
+                                borderColor: primaryLight,
+                                borderWidth: 2*padding/3,
+                              )
+                            )
+                          }
+                        ],
+                        indicators: [
+                          FortuneIndicator(
+                            alignment: Alignment.topCenter,
+                            child: SizedBox(
+                              height: 4*padding,
+                              width: 3*padding,
+                              child: CustomPaint(
+                                painter: TrianglePainter(),
+                              ),
+                            )
                           )
-                        )
-                      }
-                    ],
-                    indicators: [
-                      FortuneIndicator(
-                        alignment: Alignment.topCenter,
-                        child: SizedBox(
-                          height: 4*padding,
-                          width: 3*padding,
-                          child: CustomPaint(
-                            painter: TrianglePainter(),
-                          ),
-                        )
-                      )
-                    ],
+                        ],
+                      ),
                   ),
+                  Text(
+                      "Swipe to Spin!",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: primary, fontSize: 32),
+                  ),
+                ],
               ),
-              Text(
-                  "Swipe to Spin!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: primary, fontSize: 32),
-              ),
-            ],
-          ),
+            ),
+            ConstrainedBox(
+                  constraints: BoxConstraints.tightFor(height: 6*padding),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      //function
+                    },
+                    style: ElevatedButton.styleFrom(
+                      overlayColor: primaryDark,
+                      backgroundColor: primary,
+                      shadowColor: primaryDark,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(radius),
+                        side:BorderSide(
+                          width: border,
+                          color: primaryLight
+                        )
+                      ),
+                      padding: EdgeInsets.all(padding),
+                    ),
+                    child: Text("Edit Items", style: GoogleFonts.dynaPuff(color: white, fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: 2))),
+                )
+          ],
         ),
-        ConstrainedBox(
-              constraints: BoxConstraints.tightFor(height: 6*padding),
-              child: ElevatedButton(
-                onPressed: () {
-                  //function
-                },
-                style: ElevatedButton.styleFrom(
-                  overlayColor: primaryDark,
-                  backgroundColor: primary,
-                  shadowColor: primaryDark,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(radius),
-                    side:BorderSide(
-                      width: border,
-                      color: primaryLight
-                    )
-                  ),
-                  padding: EdgeInsets.all(padding),
-                ),
-                child: Text("Edit Items", style: GoogleFonts.dynaPuff(color: white, fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: 2))),
-            )
+        ConfettiWidget(
+          confettiController: confetti,
+          blastDirectionality: BlastDirectionality.explosive, //down
+          shouldLoop: false,
+          emissionFrequency: 1,
+          numberOfParticles: 10,
+          minBlastForce: 30,
+          maxBlastForce: 31,
+          gravity: 0.7,
+        ),
       ],
     );
   }

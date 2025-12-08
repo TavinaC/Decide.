@@ -1,28 +1,33 @@
 import 'dart:async';
 
+// import 'package:flutter/services.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
 
 class AudioController {
 
   SoLoud? _soloud; 
-
+  dynamic sounds;
   // SoundHandle? _musicHandle;
 
   Future<void> initialize() async {
     _soloud = SoLoud.instance;
     await _soloud!.init();
+    sounds = await [
+      SoLoud.instance.loadAsset('assets/sounds/tick1.MP3', mode: LoadMode.memory),
+      SoLoud.instance.loadAsset('assets/sounds/tick2.MP3', mode: LoadMode.memory),
+      SoLoud.instance.loadAsset('assets/sounds/tick3.MP3', mode: LoadMode.memory),
+    ].wait;
   }
 
   void dispose() {
     _soloud?.deinit();
   }
 
-  Future<void> playSound(String assetKey) async {
+  Future<void> playSound(int i) async {
     try {
-      final source = await _soloud!.loadAsset(assetKey);
-      await _soloud!.play(source);
-    } on SoLoudException catch (e) {
-      print("Cannot play sound '$assetKey'. Ignoring. $e");
+      await _soloud!.play(sounds[i]);
+    } on SoLoudException {
+      // print("Cannot play sound '$assetKey'. Ignoring. $e");
     }
   }
 
