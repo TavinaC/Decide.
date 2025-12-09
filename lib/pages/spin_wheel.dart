@@ -59,12 +59,12 @@ class _SpinWheelState extends State<SpinWheel> {
   late final AudioPlayer player;
 
   @override
-  void initState() async {
+  void initState() {
     prev = 0;
     player = AudioPlayer();
-    await player.setReleaseMode(ReleaseMode.stop);
-    await player.setPlayerMode(PlayerMode.lowLatency);
-    await player.setSourceAsset('sounds/ticks.mp3');
+    player.setReleaseMode(ReleaseMode.stop);
+    player.setPlayerMode(PlayerMode.lowLatency);
+    player.setSourceAsset('sounds/ticks.mp3');
 
     super.initState();
   }
