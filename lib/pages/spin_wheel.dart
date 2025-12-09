@@ -18,7 +18,7 @@ class Wheel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BasePage(
-      title: "Wheel Selector",
+      title: "Picker Wheel",
       container: Container(
         padding: EdgeInsets.all(2*padding),
         constraints: const BoxConstraints.expand(),
