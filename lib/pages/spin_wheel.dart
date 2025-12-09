@@ -93,6 +93,7 @@ class _SpinWheelState extends State<SpinWheel> {
     confetti.dispose();
     player.dispose();
     listController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -117,6 +118,10 @@ class _SpinWheelState extends State<SpinWheel> {
                       initialData: 0,
                       builder: (context, snapshot) {
                         int result = snapshot.data ?? 0;
+
+                        if (result >= items.length) {
+                            result = items.length-1;
+                        }
 
                         return Text(
                           items[result],
@@ -267,16 +272,16 @@ class _SpinWheelState extends State<SpinWheel> {
     }
   }
 
+  final ScrollController _scrollController = ScrollController();
+
   Widget buildModal() => GestureDetector(
     behavior: HitTestBehavior.opaque,
     onTap: () => Navigator.of(context).pop(),
     child: Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.8,
-        maxChildSize: 0.8,
-        minChildSize: 0.5,
-        builder: (context, scrollController) => Container(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.5,
+        child: Container(
           constraints: const BoxConstraints.expand(),
           decoration: BoxDecoration(
             color: white,
@@ -289,54 +294,71 @@ class _SpinWheelState extends State<SpinWheel> {
               Center(child: Text("Enter your choices:")),
               Form(
                 key: formKey,
-                child: TextFormField(
-                  controller: listController,
-                  keyboardType: TextInputType.numberWithOptions(signed: true),
-                  inputFormatters: <TextInputFormatter>[
-                    //insert formatters here
-                  ],
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'This field cannot be empty.';
-                    }
-                    return null;
-                  },
-                  onFieldSubmitted: (value) {
-                    addEntry();
-                  },
-                  decoration: InputDecoration(
-                    helperText: '',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: yellow, width: border),
-                      borderRadius: BorderRadius.circular(radius / 2),
+                child: Container(
+                  margin: EdgeInsets.only(top: padding),
+                  child: TextFormField(
+                    controller: listController,
+                    inputFormatters: <TextInputFormatter>[
+                      //insert formatters here
+                    ],
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'This field cannot be empty.';
+                      }
+                      return null;
+                    },
+                    onFieldSubmitted: (value) {
+                      addEntry();
+                    },
+                    decoration: InputDecoration(
+                      helperText: '',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: yellow, width: border),
+                        borderRadius: BorderRadius.circular(radius / 2),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: yellow, width: border),
+                        borderRadius: BorderRadius.circular(radius / 2),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: primary, width: border),
+                        borderRadius: BorderRadius.circular(radius / 2),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: primary, width: border),
+                        borderRadius: BorderRadius.circular(radius / 2),
+                      ),
+                      fillColor: yellowLight,
+                      filled: true,
+                      hoverColor: yellowLight,
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: yellow, width: border),
-                      borderRadius: BorderRadius.circular(radius / 2),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: primary, width: border),
-                      borderRadius: BorderRadius.circular(radius / 2),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: primary, width: border),
-                      borderRadius: BorderRadius.circular(radius / 2),
-                    ),
-                    fillColor: yellowLight,
-                    filled: true,
-                    hoverColor: yellowLight,
                   ),
                 ),
               ),
               Expanded(
-                child: AnimatedList(
-                  key: listKey,
-                  initialItemCount: items.length,
-                  itemBuilder: (context, index, animation) => ListItemWidget(
-                    item: items[index],
-                    animation: animation,
-                    onClicked: () => removeItem(index),
+                child: Padding(
+                  padding: EdgeInsetsGeometry.only(left: padding, right: padding, bottom: 2*padding),
+                  child: RawScrollbar(
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    thumbColor: primary,
+                    trackColor: yellow,
+                    trackBorderColor: Colors.transparent,
+                    trackRadius: Radius.circular(radius),
+                    thickness: padding,
+                    radius: Radius.circular(radius),
+                    controller: _scrollController,
+                    child: AnimatedList(
+                      key: listKey,
+                      controller: _scrollController,
+                      initialItemCount: items.length,
+                      itemBuilder: (context, index, animation) => ListItemWidget(
+                        item: items[index],
+                        animation: animation,
+                        onClicked: () => removeItem(index),
+                      ),
+                    ),
                   ),
                 ),
               ),
