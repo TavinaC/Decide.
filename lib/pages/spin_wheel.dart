@@ -270,103 +270,106 @@ class _SpinWheelState extends State<SpinWheel> {
   Widget buildModal() => GestureDetector(
     behavior: HitTestBehavior.opaque,
     onTap: () => Navigator.of(context).pop(),
-    child: DraggableScrollableSheet(
-      initialChildSize: 0.5,
-      maxChildSize: 0.8,
-      minChildSize: 0.5,
-      builder: (context, scrollController) => Container(
-        constraints: const BoxConstraints.expand(),
-        decoration: BoxDecoration(
-          color: white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
-        ),
-        padding: EdgeInsets.all(2 * padding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(child: Text("Enter your choices:")),
-            Form(
-              key: formKey,
-              child: TextFormField(
-                controller: listController,
-                keyboardType: TextInputType.numberWithOptions(signed: true),
-                inputFormatters: <TextInputFormatter>[
-                  //insert formatters here
-                ],
-                style: Theme.of(context).textTheme.bodyMedium,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'This field cannot be empty.';
-                  }
-                  return null;
-                },
-                onFieldSubmitted: (value) {
-                  addEntry();
-                },
-                decoration: InputDecoration(
-                  helperText: '',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: yellow, width: border),
-                    borderRadius: BorderRadius.circular(radius / 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: yellow, width: border),
-                    borderRadius: BorderRadius.circular(radius / 2),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: primary, width: border),
-                    borderRadius: BorderRadius.circular(radius / 2),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: primary, width: border),
-                    borderRadius: BorderRadius.circular(radius / 2),
-                  ),
-                  fillColor: yellowLight,
-                  filled: true,
-                  hoverColor: yellowLight,
-                ),
-              ),
-            ),
-            Expanded(
-              child: AnimatedList(
-                key: listKey,
-                initialItemCount: items.length,
-                itemBuilder: (context, index, animation) => ListItemWidget(
-                  item: items[index],
-                  animation: animation,
-                  onClicked: () => removeItem(index),
-                ),
-              ),
-            ),
-            ConstrainedBox(
-              constraints: BoxConstraints.tightFor(height: 6 * padding),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: ElevatedButton.styleFrom(
-                  overlayColor: primaryDark,
-                  backgroundColor: primary,
-                  shadowColor: primaryDark,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(radius),
-                    side: BorderSide(width: border, color: primaryLight),
-                  ),
-                  padding: EdgeInsets.all(padding),
-                ),
-                child: Text(
-                  "Done",
-                  style: GoogleFonts.dynaPuff(
-                    color: white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
+    child: Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: DraggableScrollableSheet(
+        initialChildSize: 0.8,
+        maxChildSize: 0.8,
+        minChildSize: 0.5,
+        builder: (context, scrollController) => Container(
+          constraints: const BoxConstraints.expand(),
+          decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(radius)),
+          ),
+          padding: EdgeInsets.all(2 * padding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(child: Text("Enter your choices:")),
+              Form(
+                key: formKey,
+                child: TextFormField(
+                  controller: listController,
+                  keyboardType: TextInputType.numberWithOptions(signed: true),
+                  inputFormatters: <TextInputFormatter>[
+                    //insert formatters here
+                  ],
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'This field cannot be empty.';
+                    }
+                    return null;
+                  },
+                  onFieldSubmitted: (value) {
+                    addEntry();
+                  },
+                  decoration: InputDecoration(
+                    helperText: '',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: yellow, width: border),
+                      borderRadius: BorderRadius.circular(radius / 2),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: yellow, width: border),
+                      borderRadius: BorderRadius.circular(radius / 2),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: primary, width: border),
+                      borderRadius: BorderRadius.circular(radius / 2),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: primary, width: border),
+                      borderRadius: BorderRadius.circular(radius / 2),
+                    ),
+                    fillColor: yellowLight,
+                    filled: true,
+                    hoverColor: yellowLight,
                   ),
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: AnimatedList(
+                  key: listKey,
+                  initialItemCount: items.length,
+                  itemBuilder: (context, index, animation) => ListItemWidget(
+                    item: items[index],
+                    animation: animation,
+                    onClicked: () => removeItem(index),
+                  ),
+                ),
+              ),
+              ConstrainedBox(
+                constraints: BoxConstraints.tightFor(height: 6 * padding),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    overlayColor: primaryDark,
+                    backgroundColor: primary,
+                    shadowColor: primaryDark,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(radius),
+                      side: BorderSide(width: border, color: primaryLight),
+                    ),
+                    padding: EdgeInsets.all(padding),
+                  ),
+                  child: Text(
+                    "Done",
+                    style: GoogleFonts.dynaPuff(
+                      color: white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ),
