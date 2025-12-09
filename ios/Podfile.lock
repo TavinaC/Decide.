@@ -1,7 +1,8 @@
 PODS:
-  - Flutter (1.0.0)
-  - flutter_soloud (0.0.1):
+  - audioplayers_darwin (0.0.1):
     - Flutter
+    - FlutterMacOS
+  - Flutter (1.0.0)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -9,27 +10,27 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/darwin`)
   - Flutter (from `Flutter`)
-  - flutter_soloud (from `.symlinks/plugins/flutter_soloud/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shake_gesture_ios (from `.symlinks/plugins/shake_gesture_ios/ios`)
 
 EXTERNAL SOURCES:
+  audioplayers_darwin:
+    :path: ".symlinks/plugins/audioplayers_darwin/darwin"
   Flutter:
     :path: Flutter
-  flutter_soloud:
-    :path: ".symlinks/plugins/flutter_soloud/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   shake_gesture_ios:
     :path: ".symlinks/plugins/shake_gesture_ios/ios"
 
 SPEC CHECKSUMS:
+  audioplayers_darwin: 4f9ca89d92d3d21cec7ec580e78ca888e5fb68bd
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_soloud: 272cc604453b6ca135f274045fb259e7c6426122
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   shake_gesture_ios: 85dce5e26785da11cf73e0234a5f4028f69afeef
 
-PODFILE CHECKSUM: 4305caec6b40dde0ae97be1573c53de1882a07e5
+PODFILE CHECKSUM: 53a6aebc29ccee84c41f92f409fc20cd4ca011f1
 
 COCOAPODS: 1.16.2

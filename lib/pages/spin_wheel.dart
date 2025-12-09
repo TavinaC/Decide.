@@ -7,14 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rxdart/rxdart.dart';
-import '../components/audio_controller.dart';
 import 'package:confetti/confetti.dart';
+
+import 'package:audioplayers/audioplayers.dart';
 
 
 class Wheel extends StatelessWidget {
-  const Wheel({super.key, required this.audioController});
-
-  final AudioController audioController;
+  const Wheel({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +29,13 @@ class Wheel extends StatelessWidget {
           borderRadius: BorderRadius.circular(radius),
           
         ),
-        child:SpinWheel(audioController: audioController)
+        child:SpinWheel()
     ));
   }
 }
 
 class SpinWheel extends StatefulWidget {
-  const SpinWheel({super.key, required this.audioController});
-
-  final AudioController audioController;
+  const SpinWheel({super.key});
 
   @override
   State<SpinWheel> createState() => _SpinWheelState();
@@ -59,9 +56,16 @@ class _SpinWheelState extends State<SpinWheel> {
 
   final confetti = ConfettiController(duration: const Duration(milliseconds: 100));
 
+  late final AudioPlayer player;
+
   @override
-  void initState() {
+  void initState() async {
     prev = 0;
+    player = AudioPlayer();
+    await player.setReleaseMode(ReleaseMode.stop);
+    await player.setPlayerMode(PlayerMode.lowLatency);
+    await player.setSourceAsset('sounds/ticks.mp3');
+
     super.initState();
   }
 
@@ -70,6 +74,7 @@ class _SpinWheelState extends State<SpinWheel> {
     result.close();
     selected.close();
     confetti.dispose();
+    player.dispose();
     super.dispose();
   }
 
@@ -95,15 +100,10 @@ class _SpinWheelState extends State<SpinWheel> {
                           builder: (context, snapshot) {
                             int result = snapshot.data ?? 0;
                         
-                            if (result != prev) {
-                              widget.audioController.playSound(random.nextInt(3));
-                              prev = result;
-                            }
-                        
                             return Text(
                                 items[result],
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: primary, fontSize: 32),
+                                style: TextStyle(color: getColor(result), fontSize: 32),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                             );
@@ -122,6 +122,9 @@ class _SpinWheelState extends State<SpinWheel> {
                         },
                         onAnimationEnd: () => {
                           confetti.play()
+                        },
+                        onAnimationStart: () => {
+                          player.resume()
                         },
                         onFocusItemChanged: (value) => {
                           selected.add(value)

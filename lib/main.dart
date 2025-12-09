@@ -1,4 +1,3 @@
-import 'package:decide2/components/audio_controller.dart';
 import 'package:decide2/pages/coin_flip.dart';
 import 'package:decide2/pages/magic_ball.dart';
 import 'package:decide2/pages/rng.dart';
@@ -8,19 +7,14 @@ import 'package:flutter/material.dart';
 import 'pages/home.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  final audioController = AudioController();
-  await audioController.initialize();
+void main() {
   
-  runApp(MainApp(audioController: audioController));
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({required this.audioController, super.key});
+  const MainApp({super.key});
 
-  final AudioController audioController;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +48,7 @@ class MainApp extends StatelessWidget {
         '/rng': (context) => const RNG(),
         '/coin': (context) => const Coin(),
         //'/dice': (context) => const Dice(),
-        '/wheel': (context) => Wheel(audioController: audioController),
+        '/wheel': (context) => const Wheel(),
         '/magic_ball': (context) => const MagicBall(),
       },
     );
